@@ -633,6 +633,7 @@ end
   if aux_output.converged eq 0 then c='false' else c='true'
   FXADDPAR,output_params_header,'CONVERGE',c,'convergence reached?'
   FXADDPAR,output_params_header,'VERSION',wisard_ci_version,'version of software'
+  FXADDPAR,output_params_header,'PROCSOFT','WISARD '+wisard_ci_version,'Image reconstruction software and version'
 
   mwrfits,{DUMMY:1},output,output_params_header,/silent,/no_copy,/no_comment ; !NULL makes only a header
 
