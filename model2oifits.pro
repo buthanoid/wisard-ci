@@ -344,8 +344,9 @@ if (n_elements(oitarget) gt 1) then message,/informational,"WARNING -- Output fi
 ; a good program would only write results related to current target! TODO!
   for i=0,n_elements(oiarrayarr)-1 do mwrfits,*(oiarrayarr[i]),output,*(oiarrayheadarr[i]),/silent,/no_copy,/no_comment
 
-; do not write unknown arrays.
-;  for i=0,n_elements(oiotherarr)-1 do mwrfits,*(oiotherarr[i]),output,*(oiotherheadarr[i]),/silent,/no_copy,/no_comment
+; do write unknown arrays.
+for i=0,n_elements(oiotherarr)-1 do mwrfits,*(oiotherarr[i]),output,*(oiotherheadarr[i]),/silent,/no_copy,/no_comment
+
 
   goodinsnamelist=''
 ; write structures updated with computed values: select only sections
