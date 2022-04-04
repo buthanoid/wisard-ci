@@ -313,6 +313,7 @@ if (n_elements(oitarget) gt 1) then message,/informational,"WARNING -- Output fi
 
 ;read first header
   image=mrdfits(model,0,model_main_header)
+  has_image_initial=0
 ;examine others, get visibilities and input/output params.
   for i=1,mext do begin
      ;print,"Model HDU: ",i, " extname: ",m_extname[i]
@@ -322,6 +323,9 @@ if (n_elements(oitarget) gt 1) then message,/informational,"WARNING -- Output fi
         inputparam = mrdfits(model,i,inputparamhead)
      endif else if (m_extname[i] eq  "IMAGE-OI OUTPUT PARAM") then begin ; only one output param.
         outputparam = mrdfits(model,i,outputparamhead)
+     endif else if (m_extname[i] eq "IMAGE-OI INITIAL IMAGE") then begin ; only one initial image.
+        has_image_initial=1
+        image_initial=mrdfits(model,i,model_initial_image_header)
      endif
   endfor
 ; if no "model", trouble:
@@ -334,6 +338,14 @@ if (n_elements(oitarget) gt 1) then message,/informational,"WARNING -- Output fi
   nx=sz[1]
   ny=sz[2]
   mwrfits,image,output,model_main_header,/create,/silent,/no_copy,/no_comment
+
+; write initial image (if any).
+  if (has_image_initial eq 1) then begin
+    sz=size(image_initial)
+    nx=sz[1]
+    ny=sz[2]
+    mwrfits,image_initial,output,model_initial_image_header,/silent,/no_copy,/no_comment
+  endif
 
 ; write params (header). trick is that we NEED to pass a structure.
   if (n_elements(inputparam)) then mwrfits,{dummyin:0.0},output,inputparamhead,/silent,/no_copy,/no_comment
